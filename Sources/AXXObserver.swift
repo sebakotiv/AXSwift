@@ -7,11 +7,11 @@ import Darwin
 /// Events are received as part of the application's default run loop.
 ///
 /// - seeAlso: `UIElement` for a list of exceptions that can be thrown.
-public final class Observer {
-    public typealias Callback = (_ observer: Observer,
+public final class AXXObserver {
+    public typealias Callback = (_ observer: AXXObserver,
                                  _ element: UIElement,
                                  _ notification: AXNotification) -> Void
-    public typealias CallbackWithInfo = (_ observer: Observer,
+    public typealias CallbackWithInfo = (_ observer: AXXObserver,
                                          _ element: UIElement,
                                          _ notification: AXNotification,
                                          _ info: [String: AnyObject]?) -> Void
@@ -21,8 +21,8 @@ public final class Observer {
     let callback: Callback?
     let callbackWithInfo: CallbackWithInfo?
 
-    public fileprivate(set) lazy var application: Application =
-        Application(forKnownProcessID: self.pid)!
+    public fileprivate(set) lazy var application: AXApplication =
+        AXApplication(forKnownProcessID: self.pid)!
 
     /// Creates and starts an observer on the given `processID`.
     public init(processID: pid_t, callback: @escaping Callback) throws {
@@ -132,7 +132,7 @@ private func internalCallback(_ axObserver: AXObserver,
                               userData: UnsafeMutableRawPointer?) {
     guard let userData = userData else { fatalError("userData should be an AXSwift.Observer") }
 
-    let observer = Unmanaged<Observer>.fromOpaque(userData).takeUnretainedValue()
+    let observer = Unmanaged<AXXObserver>.fromOpaque(userData).takeUnretainedValue()
     let element = UIElement(axElement)
     guard let notif = AXNotification(rawValue: notification as String) else {
         NSLog("Unknown AX notification %s received", notification as String)
@@ -148,7 +148,7 @@ private func internalInfoCallback(_ axObserver: AXObserver,
                                   userData: UnsafeMutableRawPointer?) {
     guard let userData = userData else { fatalError("userData should be an AXSwift.Observer") }
 
-    let observer = Unmanaged<Observer>.fromOpaque(userData).takeUnretainedValue()
+    let observer = Unmanaged<AXXObserver>.fromOpaque(userData).takeUnretainedValue()
     let element = UIElement(axElement)
     let info = cfInfo as NSDictionary? as! [String: AnyObject]?
     guard let notif = AXNotification(rawValue: notification as String) else {

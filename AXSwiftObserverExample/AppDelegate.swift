@@ -3,10 +3,10 @@ import AXSwift
 
 class AppDelegate: NSObject, NSApplicationDelegate {
 
-    var observer: Observer!
+    var observer: AXXObserver!
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
-        let app = Application.allForBundleID("com.apple.finder").first!
+        let app = AXApplication.allForBundleID("com.apple.finder").first!
 
         do {
             try startWatcher(app)
@@ -16,9 +16,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
-    func startWatcher(_ app: Application) throws {
+    func startWatcher(_ app: AXApplication) throws {
         var updated = false
-        observer = app.createObserver { (observer: Observer, element: UIElement, event: AXNotification, info: [String: AnyObject]?) in
+        observer = app.createObserver { (observer: AXXObserver, element: UIElement, event: AXNotification, info: [String: AnyObject]?) in
             var elementDesc: String!
             if let role = try? element.role()!, role == .window {
                 elementDesc = "\(element) \"\(try! (element.attribute(.title) as String?)!)\""

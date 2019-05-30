@@ -13,19 +13,19 @@ class ApplicationDelegate: NSObject, NSApplicationDelegate {
         // Get Active Application
         if let application = NSWorkspace.shared.frontmostApplication {
             NSLog("localizedName: \(String(describing: application.localizedName)), processIdentifier: \(application.processIdentifier)")
-            let uiApp = Application(application)!
+            let uiApp = AXApplication(application)!
             NSLog("windows: \(String(describing: try! uiApp.windows()))")
             NSLog("attributes: \(try! uiApp.attributes())")
             NSLog("at 0,0: \(String(describing: try! uiApp.elementAtPosition(0, 0)))")
             if let bundleIdentifier = application.bundleIdentifier {
                 NSLog("bundleIdentifier: \(bundleIdentifier)")
-                let windows = try! Application.allForBundleID(bundleIdentifier).first!.windows()
+                let windows = try! AXApplication.allForBundleID(bundleIdentifier).first!.windows()
                 NSLog("windows: \(String(describing: windows))")
             }
         }
 
         // Get Application by bundleIdentifier
-        let app = Application.allForBundleID("com.apple.finder").first!
+        let app = AXApplication.allForBundleID("com.apple.finder").first!
         NSLog("finder: \(app)")
         NSLog("role: \(try! app.role()!)")
         NSLog("windows: \(try! app.windows()!)")

@@ -1,7 +1,7 @@
 import Cocoa
 
 /// A `UIElement` for an application.
-public final class Application: UIElement {
+public final class AXApplication: UIElement {
     // Creates a UIElement for the given process ID.
     // Does NOT check if the given process actually exists, just checks for a valid ID.
     convenience init?(forKnownProcessID processID: pid_t) {
@@ -34,26 +34,26 @@ public final class Application: UIElement {
 
     /// Creates an `Application` for every running application with a UI.
     /// - returns: An array of `Application`s.
-    public class func all() -> [Application] {
+    public class func all() -> [AXApplication] {
         let runningApps = NSWorkspace.shared.runningApplications
         return runningApps
             .filter({ $0.activationPolicy != .prohibited })
-            .compactMap({ Application($0) })
+            .compactMap({ AXApplication($0) })
     }
 
     /// Creates an `Application` for every running instance of the given `bundleID`.
     /// - returns: A (potentially empty) array of `Application`s.
-    public class func allForBundleID(_ bundleID: String) -> [Application] {
+    public class func allForBundleID(_ bundleID: String) -> [AXApplication] {
         let runningApps = NSWorkspace.shared.runningApplications
         return runningApps
             .filter({ $0.bundleIdentifier == bundleID })
-            .compactMap({ Application($0) })
+            .compactMap({ AXApplication($0) })
     }
 
     /// Creates an `Observer` on this application, if it is still alive.
-    public func createObserver(_ callback: @escaping Observer.Callback) -> Observer? {
+    public func createObserver(_ callback: @escaping AXXObserver.Callback) -> AXXObserver? {
         do {
-            return try Observer(processID: try pid(), callback: callback)
+            return try AXXObserver(processID: try pid(), callback: callback)
         } catch AXError.invalidUIElement {
             return nil
         } catch let error {
@@ -62,9 +62,9 @@ public final class Application: UIElement {
     }
 
     /// Creates an `Observer` on this application, if it is still alive.
-    public func createObserver(_ callback: @escaping Observer.CallbackWithInfo) -> Observer? {
+    public func createObserver(_ callback: @escaping AXXObserver.CallbackWithInfo) -> AXXObserver? {
         do {
-            return try Observer(processID: try pid(), callback: callback)
+            return try AXXObserver(processID: try pid(), callback: callback)
         } catch AXError.invalidUIElement {
             return nil
         } catch let error {
