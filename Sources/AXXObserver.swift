@@ -62,6 +62,12 @@ public final class AXXObserver {
 
         start()
     }
+    
+    
+    deinit {
+        stop()
+    }
+
 
     /// Starts watching for events. You don't need to call this method unless you use `stop()`.
     ///
